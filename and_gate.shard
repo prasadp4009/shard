@@ -1,0 +1,10 @@
+module and_gate:
+    a
+    b
+    y
+
+logic:
+    y is bitwise and of a and b.
+end_of_logic
+
+end_of_module and_gate

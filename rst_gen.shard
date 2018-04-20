@@ -1,0 +1,13 @@
+module rst_gen:
+    clk is a clock
+    rst_n is a active low async reset
+    rst_in
+    rst_out
+
+logic:
+    when rst_in goes low at posedge of clk,
+    then wait for 8 clk cycles,
+    after that drive rst_out low for 32 clk cycles.
+end_of_logic
+
+end_of_module rst_gen
