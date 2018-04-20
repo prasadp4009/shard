@@ -15,10 +15,10 @@ import string
 
 warning_list = []
 error_list = []
-port_list = {}
-local_var_list = {}
-comb_global_logic = {}
-seq_logic = {}
+port_dict = {}
+local_var_dict = {}
+comb_logic_dict = {}
+seq_logic_dict = {}
 key_words_in_line = []
 operators = {"bitwise" : {"and" : "&", "or" : "|", "not" : "~", "inverted" : "~", "invert": "~", "xor" : "^", "xnor" : "~^"},
              "logical" : {"and" : "&&", "or" : "||", "not" : "!", "inverted" : "!", "invert": "!"}}
@@ -41,9 +41,27 @@ def syntax_checker(syntax_check_list):
         sys.exit()
 
 def port_finder(port_line_list):
-    print("\nPort List: ")
+    #print("\nPort List: ")
     for line in port_line_list:
-        print(line)
+        #print(line)
+        list_count = len(line.split())
+        if list_count > 1:
+            split_port_line = line.split()
+            if split_port_line[1] == "is":
+                try:
+                    port_width = int(split_port_line[split_port_line.index("bits") - 1])
+                except ValueError:
+                    print("[Syntax Error] : Invalid bit-width or grammer")
+                    sys.exit()
+                port_details = {"dir" : "", "type": "logic", "width" : port_width, "association" : [], "feature" : "port"}
+                port_dict[split_port_line[0]] = port_details
+            else:
+                print("[Syntax Error] : Invalid Syntax on " + line)
+                sys.exit()
+        else:
+            port_details = {"dir" : "", "type" : "logic", "width" : 1, "association" : [], "feature" : "port"}
+            port_dict[line] = port_details
+
 
 def logic_solver(logic_line_list):
     print("\nLogic List: ")
@@ -107,7 +125,12 @@ def main():
     syntax_checker(syntax_check_list)
     #print(operators)
     port_finder(port_line_list)
-    logic_solver(logic_line_list)
+    #logic_solver(logic_line_list)
+    for port_name, details_dict in port_dict.items():
+        print("Port is: " + port_name)
+        for key, value in details_dict.items():
+            print(key, value)
+        print("\n")
 
 if __name__ == '__main__':
     main()
